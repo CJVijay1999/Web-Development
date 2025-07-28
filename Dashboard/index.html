@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#4f46e5",
+              secondary: "#f43f5e",
+              dark: "#1e293b",
+              light: "#f8fafc",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .sidebar {
+        transition: all 0.3s ease;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          position: absolute;
+          z-index: 50;
+          height: 100vh;
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <div class="sidebar bg-white w-64 shadow-lg md:shadow-none md:relative">
+        <div class="p-4 flex items-center justify-between border-b">
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"
+            >
+              <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-dark">Analytics</span>
+          </div>
+          <button
+            id="closeSidebar"
+            class="md:hidden text-gray-500 hover:text-gray-700"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="p-4">
+          <div class="mb-6">
+            <h3 class="text-xs uppercase font-semibold text-gray-500 mb-3">
+              Main
+            </h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg bg-primary text-white"
+                >
+                  <i class="fas fa-home"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-chart-bar"></i>
+                  <span>Analytics</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-envelope"></i>
+                  <span>Messages</span>
+                  <span
+                    class="ml-auto bg-secondary text-white text-xs px-2 py-1 rounded-full"
+                    >5</span
+                  >
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-calendar"></i>
+                  <span>Calendar</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="mb-6">
+            <h3 class="text-xs uppercase font-semibold text-gray-500 mb-3">
+              Settings
+            </h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-cog"></i>
+                  <span>Settings</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-user"></i>
+                  <span>Profile</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-8">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-medium text-sm text-blue-800">Upgrade to Pro</h4>
+              <p class="text-xs text-blue-600 mt-1">
+                Get access to all premium features
+              </p>
+              <button
+                class="mt-3 w-full bg-primary text-white py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition"
+              >
+                Upgrade Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center space-x-4">
+              <button
+                id="toggleSidebar"
+                class="md:hidden text-gray-500 hover:text-gray-700"
+              >
+                <i class="fas fa-bars"></i>
+              </button>
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+                <i
+                  class="fas fa-search absolute left-3 top-3 text-gray-400"
+                ></i>
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button class="text-gray-500 hover:text-gray-700 relative">
+                <i class="fas fa-bell"></i>
+                <span
+                  class="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full"
+                ></span>
+              </button>
+              <div class="flex items-center space-x-2">
+                <img
+                  src="./assets/images/cjvijay Compressed.jpg"
+                  alt="User"
+                  class="w-8 h-8 rounded-full"
+                />
+                <span class="font-medium">CJVijay</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-y-auto p-6">
+          <div class="mb-6">
+            <h1 class="text-2xl font-bold text-dark">Dashboard Overview</h1>
+            <p class="text-gray-600">
+              Welcome back, Sarah! Here's what's happening today.
+            </p>
+          </div>
+
+          <!-- Stats Cards -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500">Total Revenue</p>
+                  <h3 class="text-2xl font-bold mt-1">$24,780</h3>
+                  <p class="text-green-500 text-sm mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 12.5% from last month
+                  </p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center"
+                >
+                  <i class="fas fa-dollar-sign text-blue-600"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500">New Users</p>
+                  <h3 class="text-2xl font-bold mt-1">1,245</h3>
+                  <p class="text-green-500 text-sm mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 8.3% from last month
+                  </p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center"
+                >
+                  <i class="fas fa-users text-green-600"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500">Active Projects</p>
+                  <h3 class="text-2xl font-bold mt-1">42</h3>
+                  <p class="text-red-500 text-sm mt-2">
+                    <i class="fas fa-arrow-down mr-1"></i> 2.1% from last month
+                  </p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center"
+                >
+                  <i class="fas fa-project-diagram text-purple-600"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500">Conversion Rate</p>
+                  <h3 class="text-2xl font-bold mt-1">3.8%</h3>
+                  <p class="text-green-500 text-sm mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 1.2% from last month
+                  </p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center"
+                >
+                  <i class="fas fa-percentage text-orange-600"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="font-bold text-lg">Revenue Overview</h2>
+                <div class="flex space-x-2">
+                  <button
+                    class="px-3 py-1 text-sm bg-primary text-white rounded-md"
+                  >
+                    Month
+                  </button>
+                  <button
+                    class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50"
+                  >
+                    Week
+                  </button>
+                  <button
+                    class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50"
+                  >
+                    Day
+                  </button>
+                </div>
+              </div>
+              <div
+                class="h-64 bg-gray-50 rounded-lg flex items-center justify-center"
+              >
+                <p class="text-gray-400">Chart would be displayed here</p>
+              </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <h2 class="font-bold text-lg mb-6">Recent Activity</h2>
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div
+                    class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-file-invoice text-blue-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">New invoice #4567</p>
+                    <p class="text-gray-500 text-sm">2 hours ago</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div
+                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-user-plus text-green-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">New user registered</p>
+                    <p class="text-gray-500 text-sm">5 hours ago</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div
+                    class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-project-diagram text-purple-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">Project "Dashboard" completed</p>
+                    <p class="text-gray-500 text-sm">1 day ago</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div
+                    class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-bug text-orange-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">Bug reported in settings</p>
+                    <p class="text-gray-500 text-sm">2 days ago</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects Table -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="font-bold text-lg">Recent Projects</h2>
+                <button
+                  class="px-4 py-2 bg-primary text-white rounded-md text-sm hover:bg-blue-700"
+                >
+                  Add Project
+                </button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Project
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Team
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Status
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Progress
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div
+                            class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-md flex items-center justify-center"
+                          >
+                            <i class="fas fa-box text-blue-600"></i>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              E-commerce Platform
+                            </div>
+                            <div class="text-sm text-gray-500">Development</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex -space-x-2">
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/women/12.jpg"
+                            alt=""
+                          />
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/men/42.jpg"
+                            alt=""
+                          />
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/women/33.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                          >Active</span
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            class="bg-blue-600 h-2 rounded-full"
+                            style="width: 75%"
+                          ></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1"
+                          >75% complete</span
+                        >
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          Edit
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div
+                            class="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-md flex items-center justify-center"
+                          >
+                            <i class="fas fa-mobile-alt text-purple-600"></i>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              Mobile App
+                            </div>
+                            <div class="text-sm text-gray-500">Design</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex -space-x-2">
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/men/22.jpg"
+                            alt=""
+                          />
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/women/44.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800"
+                          >Pending</span
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            class="bg-purple-600 h-2 rounded-full"
+                            style="width: 30%"
+                          ></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1"
+                          >30% complete</span
+                        >
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          Edit
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div
+                            class="flex-shrink-0 h-10 w-10 bg-red-100 rounded-md flex items-center justify-center"
+                          >
+                            <i class="fas fa-server text-red-600"></i>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              Server Migration
+                            </div>
+                            <div class="text-sm text-gray-500">DevOps</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex -space-x-2">
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/men/15.jpg"
+                            alt=""
+                          />
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/men/32.jpg"
+                            alt=""
+                          />
+                          <img
+                            class="w-8 h-8 rounded-full border-2 border-white"
+                            src="https://randomuser.me/api/portraits/women/28.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
+                          >In Progress</span
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            class="bg-red-600 h-2 rounded-full"
+                            style="width: 50%"
+                          ></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1"
+                          >50% complete</span
+                        >
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          Edit
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      // Toggle sidebar on mobile
+      const toggleSidebar = document.getElementById("toggleSidebar");
+      const closeSidebar = document.getElementById("closeSidebar");
+      const sidebar = document.querySelector(".sidebar");
+
+      toggleSidebar.addEventListener("click", () => {
+        sidebar.classList.add("open");
+      });
+
+      closeSidebar.addEventListener("click", () => {
+        sidebar.classList.remove("open");
+      });
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener("click", (e) => {
+        if (
+          window.innerWidth <= 768 &&
+          !sidebar.contains(e.target) &&
+          e.target !== toggleSidebar
+        ) {
+          sidebar.classList.remove("open");
+        }
+      });
+    </script>
+  </body>
+</html>
